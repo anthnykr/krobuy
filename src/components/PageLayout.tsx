@@ -11,11 +11,11 @@ function PageLayout({ pageTitle, children }: Props) {
   return (
     <>
       <Head>
-        <title>KroBuy</title>
+        <title>{pageTitle}</title>
       </Head>
       <main className="flex w-full flex-col items-center">
         <NavBar />
-        {children}
+        <section className="w-full p-6">{children}</section>
       </main>
     </>
   );

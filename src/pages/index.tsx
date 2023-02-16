@@ -1,19 +1,51 @@
 import { type NextPage } from "next";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import PageLayout from "../components/PageLayout";
+import ProductCard from "../components/ProductCard";
 
 const Home: NextPage = () => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  return (
+    <PageLayout pageTitle="KroBuy">
+      <h1 className="text-xl font-semibold text-blue-600">Welcome</h1>
 
-  if (status === "loading") return null;
+      <section className="mt-6 flex flex-wrap gap-6">
+        <ProductCard
+          productName="Product 1"
+          productPrice={10}
+          productImage="https://via.placeholder.com/200"
+        />
 
-  if (!session) {
-    router.push("/login");
-  }
+        <ProductCard
+          productName="Product 1"
+          productPrice={10}
+          productImage="https://via.placeholder.com/200"
+        />
 
-  return <PageLayout pageTitle="KroBuy">Hello</PageLayout>;
+        <ProductCard
+          productName="Product 1"
+          productPrice={10}
+          productImage="https://via.placeholder.com/200"
+        />
+
+        <ProductCard
+          productName="Product 1"
+          productPrice={10}
+          productImage="https://via.placeholder.com/200"
+        />
+
+        <ProductCard
+          productName="Product 1"
+          productPrice={10}
+          productImage="https://via.placeholder.com/200"
+        />
+
+        <ProductCard
+          productName="Product 1"
+          productPrice={10}
+          productImage="https://via.placeholder.com/200"
+        />
+      </section>
+    </PageLayout>
+  );
 };
 
 export default Home;
