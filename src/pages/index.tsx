@@ -1,46 +1,30 @@
 import { type NextPage } from "next";
 import PageLayout from "../components/PageLayout";
 import ProductCard from "../components/ProductCard";
+import useSWR from "swr";
+import { fetcher } from "../utils/requests";
+
+type product = {
+  productId: number;
+  productName: string;
+  productPrice: number;
+  productImage: string;
+};
 
 const Home: NextPage = () => {
+  const { data: products, error } = useSWR(
+    "/api/static-data/products",
+    fetcher
+  );
+  if (error) return <div>Failed to load</div>;
+  if (!products) return <div>Loading...</div>;
+
   return (
     <PageLayout pageTitle="KroBuy">
       <section className="mt-6 flex w-full flex-wrap justify-center gap-6">
-        <ProductCard
-          productName="Product 1"
-          productPrice={10}
-          productImage="https://via.placeholder.com/200"
-        />
-
-        <ProductCard
-          productName="Product 1"
-          productPrice={10}
-          productImage="https://via.placeholder.com/200"
-        />
-
-        <ProductCard
-          productName="Product 1"
-          productPrice={10}
-          productImage="https://via.placeholder.com/200"
-        />
-
-        <ProductCard
-          productName="Product 1"
-          productPrice={10}
-          productImage="https://via.placeholder.com/200"
-        />
-
-        <ProductCard
-          productName="Product 1"
-          productPrice={10}
-          productImage="https://via.placeholder.com/200"
-        />
-
-        <ProductCard
-          productName="Product 1"
-          productPrice={10}
-          productImage="https://via.placeholder.com/200"
-        />
+        {products.map((product: product) => {
+          return <ProductCard {...product} key={product.productId} />;
+        })}
       </section>
     </PageLayout>
   );
