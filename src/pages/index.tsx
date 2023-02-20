@@ -21,7 +21,7 @@ const Home: NextPage = () => {
 
   return (
     <PageLayout pageTitle="KroBuy">
-      <section className="mt-6 flex w-full flex-wrap justify-center gap-6">
+      <section className="flex w-full flex-wrap justify-center gap-6">
         {products.map((product: product) => {
           return <ProductCard {...product} key={product.productId} />;
         })}

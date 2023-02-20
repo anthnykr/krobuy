@@ -2,26 +2,31 @@
   {
     "productName": "Product 1",
     "productPrice": 10,
-    "productImage": "https://via.placeholder.com/200"
+    "productImage": "https://via.placeholder.com/200",
+    "productDescription": "This is product 1."
   },
   {
     "productName": "Product 2",
     "productPrice": 10,
-    "productImage": "https://via.placeholder.com/200"
+    "productImage": "https://via.placeholder.com/200",
+    "productDescription": "This is product 2."
   },
   {
     "productName": "Product 3",
     "productPrice": 10,
-    "productImage": "https://via.placeholder.com/200"
+    "productImage": "https://via.placeholder.com/200",
+    "productDescription": "This is product 3."
   },
   {
     "productName": "Product 4",
     "productPrice": 10,
-    "productImage": "https://via.placeholder.com/200"
+    "productImage": "https://via.placeholder.com/200",
+    "productDescription": "This is product 4."
   },
   {
     "productName": "Product 5",
     "productPrice": 10,
-    "productImage": "https://via.placeholder.com/200"
+    "productImage": "https://via.placeholder.com/200",
+    "productDescription": "This is product 5."
   }
 ]

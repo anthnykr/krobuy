@@ -11,7 +11,6 @@ interface Props {
 
 function ProductCard({ productName, productPrice, productImage }: Props) {
   return (
-    // make productName into product id and link to product page
     <Link
       href={{
         pathname: "/[productName]",

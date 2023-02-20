@@ -15,7 +15,7 @@ function PageLayout({ pageTitle, children }: Props) {
       </Head>
       <main className="flex w-full flex-col items-center">
         <NavBar />
-        <section className="w-full p-6">{children}</section>
+        <div className="mt-6">{children}</div>
       </main>
     </>
   );
