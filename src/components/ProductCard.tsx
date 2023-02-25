@@ -23,7 +23,7 @@ function ProductCard({ productName, productPrice, productImage }: Props) {
         </div>
 
         <h1 className="font-semibold">{productName}</h1>
-
+        {/* TODO: make this dynamic */}
         <div className="flex items-center">
           <StarIcon className="h-5 w-5 text-yellow-400" />
           <StarIcon className="h-5 w-5 text-yellow-400" />
