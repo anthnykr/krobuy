@@ -1,12 +1,25 @@
 import { type NextPage } from "next";
+import Image from "next/image";
 import PageLayout from "../components/PageLayout";
+import { api } from "../utils/api";
 
 const Cart: NextPage = () => {
+  const { data: cart } = api.cart.getCart.useQuery();
+
   return (
     <PageLayout pageTitle="Cart">
       <main className="flex divide-x">
-        <section className="p-6">
+        <section className="space-y-3 p-6">
           <h1 className="text-2xl font-bold text-blue-600">Cart</h1>
+          {cart &&
+            cart.map((item) => {
+              return (
+                <div>
+                  <h1>{item.productName}</h1>
+                  <h2>{item.quantity}</h2>
+                </div>
+              );
+            })}
         </section>
 
         <section className="space-y-3 p-6">

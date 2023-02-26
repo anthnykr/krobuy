@@ -44,4 +44,33 @@ export const cartRouter = createTRPCRouter({
         });
       }
     }),
+
+  getCart: protectedProcedure.query(async ({ ctx }) => {
+    const { session, prisma } = ctx;
+
+    const email = session.user.email;
+
+    if (!email) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "You must be logged in to view your cart",
+      });
+    }
+
+    try {
+      const cart = await prisma.item.findMany({
+        where: {
+          user: {
+            email,
+          },
+        },
+      });
+      return cart;
+    } catch (error) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+      });
+    }
+  }),
 });

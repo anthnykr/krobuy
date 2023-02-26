@@ -5,8 +5,10 @@ import { fetcher } from "../utils/requests";
 import useSWR from "swr";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { StarIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GetServerSideProps } from "next";
+import { api } from "../utils/api";
+import { toast } from "react-hot-toast";
 
 type productType = {
   productName: string;
@@ -39,14 +41,14 @@ const ProductPage = ({ query }: Props) => {
   });
 
   const [quantity, setQuantity] = useState(1);
-  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
 
-  useEffect(() => {
-    if (isSubmitSuccessful) {
+  const addToCart = api.cart.addToCart.useMutation({
+    onSuccess: () => {
+      setQuantity(1);
+      toast.success("Added to cart successfully");
       reset();
-      setIsSubmitSuccessful(false);
-    }
-  }, [isSubmitSuccessful]);
+    },
+  });
 
   // Fetching the product data
   const { data: products, error } = useSWR(
@@ -65,10 +67,12 @@ const ProductPage = ({ query }: Props) => {
     (product: productType) => product.productName === productName
   );
 
-  const onSubmit: SubmitHandler<addToCart> = (data) => {
+  const onSubmit: SubmitHandler<addToCart> = async (data) => {
     console.log(data);
-    setIsSubmitSuccessful(true);
-    setQuantity(1);
+    await addToCart.mutateAsync({
+      productName: product.productName,
+      quantity: data.quantity,
+    });
   };
 
   // TODO: add reviews to database and product page + let user submit review (DECIDE ON MONGODB OR POSTGRESQL)
