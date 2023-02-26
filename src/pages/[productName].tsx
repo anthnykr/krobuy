@@ -5,7 +5,8 @@ import { fetcher } from "../utils/requests";
 import useSWR from "swr";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { StarIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { GetServerSideProps } from "next";
 
 type productType = {
   productName: string;
@@ -18,16 +19,36 @@ type addToCart = {
   quantity: number;
 };
 
-const ProductPage = () => {
+type Props = {
+  query: {
+    productName: string;
+  };
+};
+
+const ProductPage = ({ query }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<addToCart>();
-  const onSubmit: SubmitHandler<addToCart> = (data) => console.log(data);
+    setValue,
+    reset,
+  } = useForm<addToCart>({
+    defaultValues: {
+      quantity: 1,
+    },
+  });
 
   const [quantity, setQuantity] = useState(1);
+  const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
 
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+      setIsSubmitSuccessful(false);
+    }
+  }, [isSubmitSuccessful]);
+
+  // Fetching the product data
   const { data: products, error } = useSWR(
     "/api/static-data/products",
     fetcher
@@ -36,12 +57,19 @@ const ProductPage = () => {
   if (error) return <div>Failed to load</div>;
   if (!products) return <div>Loading...</div>;
 
-  const router = useRouter();
-  const { productName } = router.query;
-  // TODO: when refreshing the page it breaks, figure out why
+  // Obtaining the product name from the url
+  // const router = useRouter();
+  // const { productName } = router.query;
+  const productName = query.productName;
   const product: productType = products.find(
     (product: productType) => product.productName === productName
   );
+
+  const onSubmit: SubmitHandler<addToCart> = (data) => {
+    console.log(data);
+    setIsSubmitSuccessful(true);
+    setQuantity(1);
+  };
 
   // TODO: add reviews to database and product page + let user submit review (DECIDE ON MONGODB OR POSTGRESQL)
   // TODO: add redux for cart
@@ -81,27 +109,38 @@ const ProductPage = () => {
                 type="button"
                 className="inline-flex w-10 items-center justify-center text-2xl font-bold"
                 onClick={() => {
-                  quantity > 0 && setQuantity((quantity) => quantity - 1);
+                  if (quantity > 1) {
+                    setValue("quantity", quantity - 1);
+                    setQuantity((quantity) => quantity - 1);
+                  }
                 }}
               >
                 <MinusIcon className="h-5 w-5" />
               </button>
               <input
-                defaultValue={1}
-                value={quantity}
                 className="w-14 border border-y-0 border-gray-700 p-2 text-center"
-                {...register("quantity", { required: true })}
+                disabled
+                required
+                {...register("quantity")}
               />
+              {errors.quantity && (
+                <span className="text-sm text-red-500">
+                  {errors.quantity.message}
+                </span>
+              )}
               <button
                 type="button"
                 className="inline-flex w-10 items-center justify-center text-2xl font-bold"
-                onClick={() => setQuantity((quantity) => quantity + 1)}
+                onClick={() => {
+                  setValue("quantity", quantity + 1);
+                  setQuantity((quantity) => quantity + 1);
+                }}
               >
                 <PlusIcon className="h-5 w-5" />
               </button>
             </div>
 
-            <button className="rounded-lg border border-blue-700 bg-blue-600 py-2 px-3 text-gray-200">
+            <button className="rounded-lg border border-blue-700 bg-blue-600 py-2 px-3 text-gray-100">
               Add to Cart
             </button>
           </form>
@@ -109,6 +148,15 @@ const ProductPage = () => {
       </div>
     </PageLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { query } = context;
+  return {
+    props: {
+      query,
+    },
+  };
 };
 
 export default ProductPage;
