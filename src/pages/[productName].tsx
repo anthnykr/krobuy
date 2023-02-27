@@ -76,7 +76,7 @@ const ProductPage = ({ query }: Props) => {
   };
 
   // TODO: add reviews to database and product page + let user submit review (DECIDE ON MONGODB OR POSTGRESQL)
-  // TODO: add redux for cart
+  // TODO: add useContext for cart
   return (
     <PageLayout pageTitle={product.productName}>
       {/* TODO: maybe make this a grid with 2 columns instead of manually setting widths */}
