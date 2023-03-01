@@ -1,14 +1,12 @@
 import Image from "next/image";
-import { useRouter } from "next/router";
 import PageLayout from "../components/PageLayout";
-import { fetcher } from "../utils/requests";
-import useSWR from "swr";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { StarIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { GetServerSideProps } from "next";
-import { api } from "../utils/api";
 import { toast } from "react-hot-toast";
+import { productData } from "../context/product-data";
+import CartContext from "../context/Cart/CartContext";
 
 type productType = {
   productName: string;
@@ -42,19 +40,25 @@ const ProductPage = ({ query }: Props) => {
 
   const [quantity, setQuantity] = useState(1);
 
-  const addToCart = api.cart.addToCart.useMutation({
-    onSuccess: () => {
-      setQuantity(1);
-      toast.success("Added to cart successfully");
-      reset();
-    },
-  });
+  const { cart, setCart } = useContext(CartContext);
+
+  const addToCart = async () => {
+    setCart([
+      ...cart,
+      {
+        productName: product.productName,
+        productPrice: product.productPrice,
+        productImage: product.productImage,
+        quantity,
+      },
+    ]);
+    setQuantity(1);
+    toast.success("Added to cart successfully");
+    reset();
+  };
 
   // Fetching the product data
-  const { data: products, error } = useSWR(
-    "/api/static-data/products",
-    fetcher
-  );
+  const { products, error } = productData();
 
   if (error) return <div>Failed to load</div>;
   if (!products) return <div>Loading...</div>;
@@ -69,10 +73,7 @@ const ProductPage = ({ query }: Props) => {
 
   const onSubmit: SubmitHandler<addToCart> = async (data) => {
     console.log(data);
-    await addToCart.mutateAsync({
-      productName: product.productName,
-      quantity: data.quantity,
-    });
+    await addToCart();
   };
 
   // TODO: add reviews to database and product page + let user submit review (DECIDE ON MONGODB OR POSTGRESQL)
