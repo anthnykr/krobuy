@@ -3,11 +3,14 @@ import Image from "next/image";
 import PageLayout from "../components/PageLayout";
 import { productData } from "../context/product-data";
 import CartContext from "../context/Cart/CartContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 const Cart: NextPage = () => {
   const { cart, setCart } = useContext(CartContext);
-  console.log(cart);
+  // Getting cart from local storage whenever cart gets changed
+  useEffect(() => {
+    setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
+  }, [cart]);
 
   const { products, error } = productData();
   if (error) return <div>Failed to load</div>;

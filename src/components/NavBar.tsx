@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { api } from "../utils/api";
+import CartContext from "../context/Cart/CartContext";
 
 function NavBar() {
-  const { data: cart } = api.cart.getCart.useQuery();
+  const { cart, setCart } = useContext(CartContext);
+  // Getting cart from local storage whenever cart gets changed
+  useEffect(() => {
+    setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
+  }, [cart]);
 
   return (
     <div className="sticky flex w-full justify-between bg-gray-200 py-5 px-8">
