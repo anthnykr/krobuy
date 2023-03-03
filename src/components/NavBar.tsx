@@ -2,13 +2,16 @@ import React, { useContext, useEffect } from "react";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import CartContext from "../context/Cart/CartContext";
+import { signOut, useSession } from "next-auth/react";
 
 function NavBar() {
   const { cart, setCart } = useContext(CartContext);
   // Getting cart from local storage whenever cart gets changed
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
-  }, [cart]);
+  }, []);
+
+  const { data: session } = useSession();
 
   return (
     <div className="sticky flex w-full justify-between bg-gray-200 py-5 px-8">
@@ -27,7 +30,11 @@ function NavBar() {
             </span>
           )}
         </div>
-        <Link href="/login">Login</Link>
+        {!session ? (
+          <Link href="/login">Login</Link>
+        ) : (
+          <button onClick={() => signOut({ callbackUrl: "/" })}>Logout</button>
+        )}
       </div>
     </div>
   );

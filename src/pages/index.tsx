@@ -5,7 +5,6 @@ import useSWR from "swr";
 import { fetcher } from "../utils/requests";
 
 type product = {
-  productId: number;
   productName: string;
   productPrice: number;
   productImage: string;
@@ -23,7 +22,7 @@ const Home: NextPage = () => {
     <PageLayout pageTitle="KroBuy">
       <section className="flex w-full flex-wrap justify-center gap-6">
         {products.map((product: product) => {
-          return <ProductCard {...product} key={product.productId} />;
+          return <ProductCard {...product} key={product.productName} />;
         })}
       </section>
     </PageLayout>
