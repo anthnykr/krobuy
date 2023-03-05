@@ -5,6 +5,13 @@ import { productData } from "../context/product-data";
 import CartContext from "../context/Cart/CartContext";
 import { useContext, useEffect } from "react";
 
+type product = {
+  productName: string;
+  productPrice: number;
+  productImage: string;
+  quantity: number;
+};
+
 const Cart: NextPage = () => {
   const { cart, setCart } = useContext(CartContext);
   // Getting cart from local storage whenever cart gets changed
@@ -16,7 +23,13 @@ const Cart: NextPage = () => {
   if (error) return <div>Failed to load</div>;
   if (!products) return <div>Loading...</div>;
 
-  let subtotal = 0;
+  const subtotal = (cart: product[]) => {
+    return cart.reduce(
+      (sum, currentValue) =>
+        sum + currentValue.productPrice * currentValue.quantity,
+      0
+    );
+  };
 
   return (
     <PageLayout pageTitle="Cart">
@@ -30,7 +43,6 @@ const Cart: NextPage = () => {
                 <div key={item.productName}>
                   <div className="flex items-center gap-6">
                     <div className="relative h-[150px] w-[150px]">
-                      {/* TODO: make the cart item into a component */}
                       <Image
                         src={item.productImage}
                         alt={`${item.productName} Image`}
@@ -68,29 +80,22 @@ const Cart: NextPage = () => {
           <div className="flex flex-col gap-1 rounded-lg bg-gray-300 p-6 text-gray-600">
             <p className="flex justify-between">
               <span>Subtotal</span>
-              <span>
-                $
-                {cart.reduce(
-                  (sum, currentValue) =>
-                    sum + currentValue.productPrice * currentValue.quantity,
-                  0
-                )}
-              </span>
+              <span>${subtotal(cart)}</span>
             </p>
 
             <p className="flex justify-between">
               <span>Shipping</span>
-              <span>$0.00</span>
+              <span>$5</span>
             </p>
 
             <p className="flex justify-between">
-              <span>Tax</span>
-              <span>$0.00</span>
+              <span>Tax (10%)</span>
+              <span>${0.1 * subtotal(cart)}</span>
             </p>
 
             <p className="flex justify-between">
               <span>Total</span>
-              <span>$0.00</span>
+              <span>${1.1 * subtotal(cart)}</span>
             </p>
 
             <button className="mt-2 rounded-lg border border-blue-700 bg-blue-600 py-2 px-3 text-gray-100">
