@@ -4,6 +4,7 @@ import PageLayout from "../components/PageLayout";
 import { productData } from "../context/product-data";
 import CartContext from "../context/Cart/CartContext";
 import { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 
 type product = {
   productName: string;
@@ -18,6 +19,8 @@ const Cart: NextPage = () => {
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
   }, []);
+
+  const router = useRouter();
 
   const { products, error } = productData();
   if (error) return <div>Failed to load</div>;
@@ -98,7 +101,11 @@ const Cart: NextPage = () => {
               <span>${1.1 * subtotal(cart)}</span>
             </p>
 
-            <button className="mt-2 rounded-lg border border-blue-700 bg-blue-600 py-2 px-3 text-gray-100">
+            <button
+              type="button"
+              onClick={() => router.push("/checkout")}
+              className="mt-2 rounded-lg border border-blue-700 bg-blue-600 py-2 px-3 text-gray-100"
+            >
               Checkout
             </button>
           </div>
