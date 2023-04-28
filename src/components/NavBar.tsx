@@ -26,7 +26,7 @@ function NavBar() {
           {cart && cart.length > 0 && (
             <span className="absolute -top-1 -right-1 h-2 w-2">
               <span className="absolute h-2 w-2 animate-[ping_3s_infinite] rounded-full bg-blue-500 opacity-75"></span>
-              <span className="absolute h-2 w-2 rounded-full bg-blue-600"></span>
+              <span className="absolute h-2 w-2 rounded-full bg-blue-600 text-white"></span>
             </span>
           )}
         </div>

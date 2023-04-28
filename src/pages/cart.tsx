@@ -83,24 +83,34 @@ const Cart: NextPage = () => {
           <div className="flex flex-col gap-1 rounded-lg bg-gray-300 p-6 text-gray-600">
             <p className="flex justify-between">
               <span>Subtotal</span>
-              <span>${subtotal(cart)}</span>
+              <span>
+                ${subtotal(cart)}
+                {subtotal(cart) % 1 === 0 && ".00"}
+              </span>
             </p>
 
             <p className="flex justify-between">
               <span>Shipping</span>
-              <span>$5</span>
+              <span>$5.00</span>
             </p>
 
             <p className="flex justify-between">
               <span>Tax (10%)</span>
-              <span>${0.1 * subtotal(cart)}</span>
+              <span>
+                ${0.1 * subtotal(cart)}
+                {(0.1 * subtotal(cart)) % 1 === 0 && ".00"}
+              </span>
             </p>
 
             <p className="flex justify-between">
               <span>Total</span>
-              <span>${1.1 * subtotal(cart)}</span>
+              <span>
+                ${1.1 * subtotal(cart)}
+                {(1.1 * subtotal(cart)) % 1 === 0 && ".00"}
+              </span>
             </p>
 
+            {/* TODO: check if the user is logged in before letting them go to the checkout page */}
             <button
               type="button"
               onClick={() => router.push("/checkout")}
