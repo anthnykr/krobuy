@@ -2,9 +2,8 @@ import Image from "next/image";
 import PageLayout from "../components/PageLayout";
 import { StarIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useContext, useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
 import { toast } from "react-hot-toast";
-import { productData } from "../context/product-data";
+import { ProductData } from "../context/product-data";
 import CartContext from "../context/Cart/CartContext";
 
 type productType = {
@@ -26,18 +25,18 @@ const ProductPage = ({ query }: Props) => {
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+  }, []);
 
   // Fetching the product data
-  const { products, error } = productData();
+  const { products, error } = ProductData();
   if (error) return <div>Failed to load</div>;
   if (!products) return <div>Loading...</div>;
 
   // Obtaining the product name from the url
   const productName = query.productName;
-  const product: productType = products.find(
+  const product = products.find(
     (product: productType) => product.productName === productName
-  );
+  ) as productType;
 
   const addToCart = () => {
     setCart([
@@ -127,8 +126,7 @@ const ProductPage = ({ query }: Props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { query } = context;
+export const getServerSideProps = ({ query }: { query: string }) => {
   return {
     props: {
       query,

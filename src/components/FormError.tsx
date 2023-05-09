@@ -2,7 +2,7 @@ import React from "react";
 import { ErrorMessage } from "@hookform/error-message";
 
 type Props = {
-  errors: any;
+  errors: object;
   name: string;
 };
 

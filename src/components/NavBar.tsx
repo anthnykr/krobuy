@@ -4,11 +4,18 @@ import Link from "next/link";
 import CartContext from "../context/Cart/CartContext";
 import { signOut, useSession } from "next-auth/react";
 
+type product = {
+  productName: string;
+  productPrice: number;
+  productImage: string;
+  quantity: number;
+};
+
 function NavBar() {
   const { cart, setCart } = useContext(CartContext);
   // Getting cart from local storage whenever cart gets changed
   useEffect(() => {
-    setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
+    setCart(JSON.parse(localStorage.getItem("cart") || "[]") as product[]);
   }, []);
 
   const { data: session } = useSession();
@@ -33,7 +40,9 @@ function NavBar() {
         {!session ? (
           <Link href="/login">Login</Link>
         ) : (
-          <button onClick={() => signOut({ callbackUrl: "/" })}>Logout</button>
+          <button onClick={() => void signOut({ callbackUrl: "/" })}>
+            Logout
+          </button>
         )}
       </div>
     </div>

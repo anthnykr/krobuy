@@ -7,6 +7,7 @@ interface Props {
   productName: string;
   productPrice: number;
   productImage: string;
+  productDescription: string;
 }
 
 function ProductCard({ productName, productPrice, productImage }: Props) {

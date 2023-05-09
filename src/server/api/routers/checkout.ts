@@ -30,12 +30,12 @@ export const checkoutRouter = createTRPCRouter({
       });
 
       // find user in database and their stripeId
-      const stripeId = user?.stripeId;
+      const stripeId = user?.stripeId || undefined;
 
       // success url
       const success_url = "";
 
-      const createParams: any = {
+      const createParams: Stripe.Checkout.SessionCreateParams = {
         line_items: [
           {
             price: input.product.priceId,

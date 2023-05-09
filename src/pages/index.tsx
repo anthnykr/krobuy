@@ -1,20 +1,18 @@
 import { type NextPage } from "next";
 import PageLayout from "../components/PageLayout";
 import ProductCard from "../components/ProductCard";
-import useSWR from "swr";
-import { fetcher } from "../utils/requests";
+import { ProductData } from "../context/product-data";
 
 type product = {
   productName: string;
   productPrice: number;
   productImage: string;
+  productDescription: string;
 };
 
 const Home: NextPage = () => {
-  const { data: products, error } = useSWR(
-    "/api/static-data/products",
-    fetcher
-  );
+  const { products, error } = ProductData();
+
   if (error) return <div>Failed to load</div>;
   if (!products) return <div>Loading...</div>;
 

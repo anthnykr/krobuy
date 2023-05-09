@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Image from "next/image";
 import PageLayout from "../components/PageLayout";
-import { productData } from "../context/product-data";
+import { ProductData } from "../context/product-data";
 import CartContext from "../context/Cart/CartContext";
 import { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -17,12 +17,12 @@ const Cart: NextPage = () => {
   const { cart, setCart } = useContext(CartContext);
   // Getting cart from local storage whenever cart gets changed
   useEffect(() => {
-    setCart(JSON.parse(localStorage.getItem("cart") || "[]"));
+    setCart(JSON.parse(localStorage.getItem("cart") || "[]") as product[]);
   }, []);
 
   const router = useRouter();
 
-  const { products, error } = productData();
+  const { products, error } = ProductData();
   if (error) return <div>Failed to load</div>;
   if (!products) return <div>Loading...</div>;
 
@@ -43,7 +43,7 @@ const Cart: NextPage = () => {
           {cart &&
             cart.map((item, index) => {
               return (
-                <div key={item.productName}>
+                <div key={index}>
                   <div className="flex items-center gap-6">
                     <div className="relative h-[150px] w-[150px]">
                       <Image
@@ -113,7 +113,7 @@ const Cart: NextPage = () => {
             {/* TODO: check if the user is logged in before letting them go to the checkout page */}
             <button
               type="button"
-              onClick={() => router.push("/checkout")}
+              onClick={() => void router.push("/checkout")}
               className="mt-2 rounded-lg border border-blue-700 bg-blue-600 py-2 px-3 text-gray-100"
             >
               Checkout

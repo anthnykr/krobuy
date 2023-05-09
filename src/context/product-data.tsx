@@ -1,8 +1,15 @@
 import useSWR from "swr";
 import { fetcher } from "../utils/requests";
 
-export function productData() {
-  const { data: products, error } = useSWR(
+type product = {
+  productName: string;
+  productPrice: number;
+  productImage: string;
+  productDescription: string;
+};
+
+export function ProductData() {
+  const { data: products, error } = useSWR<product[], Error>(
     "/api/static-data/products",
     fetcher
   );
