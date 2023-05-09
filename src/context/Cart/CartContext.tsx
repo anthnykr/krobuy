@@ -15,7 +15,7 @@ type CartContextType = {
 const CartContext = createContext<CartContextType>({
   cart: [],
   setCart: () => {
-    console.log("Error");
+    console.log("N/A");
   },
 });
 
